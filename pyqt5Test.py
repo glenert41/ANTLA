@@ -1,6 +1,13 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import *
 
 import sys
+
+
+
+
+
+
+
 
 
 
