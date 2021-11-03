@@ -5,6 +5,18 @@ root.title("ANTLA")
 frame = tk.Frame(root)
 relief=tk.FLAT
 
+#331338 is Dark Purple
+darkPurple = "#331338"
+#88869c is blueLavender
+blueLavender = "#88869C"
+#D4b483 is Burlywood
+burlywood = "#D4B483"
+#59C9A5 is Ocean Green
+oceanGreen = "#59C9A5"
+#4D7298 is Queen Blue
+queenBlue = "#4D7298"
+#ffffff is white
+white = "#ffffff"
 
 def onclick(args):
     
@@ -17,20 +29,27 @@ def onclick(args):
 #create button elements
 lightBtnOn = tk.Button(root, text="Lights On", relief=tk.FLAT,
                        command=lambda:onclick("lightBtnOn"),
-                       fg = "#ffffff",
-                       bg = "#37d3ff",
-                       activebackground="#3791ff",
+                       fg = white, #text color
+                       bg = blueLavender, #button color 
+                       activebackground=queenBlue,
                        highlightthickness=0,
-                       highlightcolor="#37d3ff",
-                       highlightbackground="#37d3ff",
+                       highlightcolor= blueLavender,
+                       highlightbackground= blueLavender,
                        borderwidth=2)
-lightBtnOff = tk.Button(root, text="Lights Off",command=lambda:onclick("lightBtnOff"))
-
+lightBtnOff = tk.Button(root, text="Lights Off", relief=tk.FLAT,
+                       command=lambda:onclick("lightBtnOff"),
+                       fg = white,
+                       bg = blueLavender, #button color 
+                       activebackground=queenBlue,
+                       highlightthickness=0,
+                       highlightcolor= blueLavender,
+                       highlightbackground= blueLavender,
+                       borderwidth=2)
 
 #Put button elements on main window
 lightBtnOn.pack()
 lightBtnOff.pack()
 
 root.geometry("400x400")
-root.configure(bg="#FFFDD0")
+root.configure(bg=darkPurple)
 root.mainloop()
