@@ -19,7 +19,12 @@ queenBlue = "#4D7298"
 #ffffff is white
 white = "#ffffff"
 
-
+def onclick(args):
+    
+    if args == "lightBtnOn":
+        print("Lights are On")
+    if args == "lightBtnOff":
+        print("Lights are Off")
 
 
 #create button elements
@@ -42,16 +47,15 @@ lightBtnOff = tk.Button(root, text="Lights Off", relief=tk.FLAT,
                        highlightbackground= blueLavender,
                        borderwidth=2)
 
-keyboard.on_press_key("w", lambda _:print("w_pressed"))
+if keyboard.on_press_key("w"):
+    print("W is pressed")
+    
+if keyboard.on_press_key("s"):
+    print("S is pressed")
     
 
 
-def onclick(args):
-    
-    if args == "lightBtnOn":
-        print("Lights are On")
-    if args == "lightBtnOff":
-        print("Lights are Off")
+
 
 
 
