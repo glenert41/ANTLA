@@ -1,5 +1,5 @@
 import tkinter as tk
-import keyboard
+#import keyboard
 
 root = tk.Tk()
 root.title("ANTLA")
@@ -19,12 +19,18 @@ queenBlue = "#4D7298"
 #ffffff is white
 white = "#ffffff"
 
+lightVar = tk.StringVar()
+
 def onclick(args):
     
     if args == "lightBtnOn":
         print("Lights are On")
+        #lightVar = str("Lights are On")
+        lightVar.set("Lights On")
     if args == "lightBtnOff":
         print("Lights are Off")
+        #lightVar = str("Lights are Off")
+        lightVar.set("Lights Off")
 
 
 #create button elements
@@ -46,23 +52,27 @@ lightBtnOff = tk.Button(root, text="Lights Off", relief=tk.FLAT,
                        highlightcolor= blueLavender,
                        highlightbackground= blueLavender,
                        borderwidth=2)
-
+'''
 if keyboard.on_press_key("w"):
     print("W is pressed")
     
 if keyboard.on_press_key("s"):
     print("S is pressed")
-    
+'''
 
 
 
+lightLabel = tk.Label(root,text=lightVar)
 
 
 
-#Put button elements on main window
+#Put elements on main window
 lightBtnOn.pack()
 lightBtnOff.pack()
+lightLabel.pack()
+
 
 root.geometry("400x400")
 root.configure(bg=darkPurple)
 root.mainloop()
+root.update()
