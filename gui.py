@@ -21,15 +21,27 @@ queenBlue = "#4D7298"
 #ffffff is white
 white = "#ffffff"
 
-buttonStyle = Style()
-buttonStyle.configure("buttonStyle", foreground = "red")
+'''fg = white, #text color
+                       bg = blueLavender, #button color 
+                       activebackground=queenBlue,
+                       highlightthickness=0,
+                       highlightcolor= blueLavender,
+                       highlightbackground= blueLavender,
+                       borderwidth=2'''
 
+buttonStyle = {'background':blueLavender,
+               'foreground':'white',
+               'activebackground':queenBlue,
+               'highlightthickness':0,
+               'highlightcolor':blueLavender,
+               'highlightbackground':blueLavender,
+               'borderwidth':2}
 
 
 
 
 lightVar = tk.StringVar()
-lightVar.set("No Status Chosen; Lights off")
+lightVar.set("No Status Chosen; Lights Off")
 
 
 def onclick(args):
@@ -44,37 +56,26 @@ def onclick(args):
 
 
 #create button elements
-lightBtnOn = tk.Button(root, text="Lights On", relief=tk.FLAT,
-                       command=lambda:onclick("lightBtnOn"),
-                       fg = white, #text color
-                       bg = blueLavender, #button color 
-                       activebackground=queenBlue,
-                       highlightthickness=0,
-                       highlightcolor= blueLavender,
-                       highlightbackground= blueLavender,
-                       borderwidth=2)
-lightBtnOff = ttk.Button(root, text="Lights Off", style="buttonStyle",
-                       command=lambda:onclick("lightBtnOff")
+lightBtnOn = tk.Button(root,buttonStyle, text="Lights On", relief=tk.FLAT,
+                       command=lambda:onclick("lightBtnOn")
                        )
-lightLabel = tk.Label(root,textvariable=lightVar,
-                      fg=white,
-                      bg = blueLavender)
-
-'''
-if keyboard.on_press_key("w"):
-    print("W is pressed")
-    
-if keyboard.on_press_key("s"):
-    print("S is pressed")
-'''
+lightBtnOff = tk.Button(root,buttonStyle, text="Lights Off",relief=tk.FLAT,
+                       command=lambda:onclick("lightBtnOff"))
+lightLabel = tk.Label(root,buttonStyle,textvariable=lightVar)
 
 
 
 #Put elements on main window
-lightBtnOn.pack()
-lightBtnOff.pack()
-lightLabel.pack()
 
+#Lights
+#lightBtnOn.pack()
+#lightBtnOff.pack()
+#lightLabel.pack()
+
+
+lightBtnOn.grid(row = 1, column = 1, sticky=tk.EW)
+lightBtnOff.grid(row=2, column = 1, sticky=tk.EW)
+lightLabel.grid(row=3, column = 1, sticky=tk.EW)
 
 
 root.geometry("400x400")
