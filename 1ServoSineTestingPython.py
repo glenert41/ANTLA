@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import math
 
+GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 
 myStep = .1
