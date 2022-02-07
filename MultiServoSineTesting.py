@@ -3,6 +3,11 @@ import time
 import math
 import pigpio
 
+import os
+open_io="sudo pigpiod"
+os.system(open_io)
+time.sleep(1)
+
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
 pwm = pigpio.pi()
@@ -20,6 +25,11 @@ pwm.set_mode(servo1, pigpio.OUTPUT)
 pwm.set_PWM_frequency(servo1,50)
 input1 = math.pi/2
 
+servo2 = 13
+pwm.set_mode(servo0,pigpio.OUTPUT)
+pwm.set_PWM_frequency(servo2,50)
+input2 = math.pi
+
 
 def cosineMap(pos):
     mappedPos = math.cos(pos)
@@ -34,6 +44,7 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
 while True:
     output0 = cosineMap(input0)
     output1 = cosineMap(input1)
+    output2 = cosineMap(input2)
     
     
     desiredLow = 0
@@ -42,19 +53,27 @@ while True:
     
     output0 = myMapValues(output0,-1,1,desiredLow,desiredHigh)
     output1 = myMapValues(output1,-1,1,desiredLow,desiredHigh)
+    output2 = myMapValues(output2,-1,1,desiredLow,desiredHigh)
+    
     
     servoOutput0 = myMapValues(output0,desiredLow,desiredHigh,500,2500)
     servoOutput1 = myMapValues(output1,desiredLow,desiredHigh,500,2500)
+    servoOutput2 = myMapValues(output2,desiredLow,desiredHigh,500,2500)
+    
     
     pwm.set_servo_pulsewidth(servo0,servoOutput0)
     pwm.set_servo_pulsewidth(servo1,servoOutput1)
+    pwm.set_servo_pulsewidth(servo2,servoOutput2)
     
+    #print("Servo0: " + str(servoOutput0))
+    #print("Servo1: " + str(servoOutput1))
     #pwm.set_servo_pulsewidth(servo0,500)
     #pwm.set_servo_pulsewidth(servo1,500)
-    
+    #pwm.set_servo_pulsewidth(servo2,500)
 
     input0 = input0 + myStep
     input1 = input1 + myStep
+    input2 = input2 + myStep
 
     iterations += 1
     time.sleep(.05)
