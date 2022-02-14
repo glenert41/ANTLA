@@ -23,6 +23,7 @@ pwm = pigpio.pi()
 
 iterations = 0
 myStep = .1
+currentDirection = "Forward"
 desiredLow = 0
 desiredHigh = 180
 
@@ -88,7 +89,7 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
     return variable
 
 
-def moveForward():
+def moveLinear():
         global input0
         global input1
         global input2
@@ -116,10 +117,10 @@ def moveForward():
         pwm.set_servo_pulsewidth(servo3,servoOutput3)
 
 
-        input0 = input0 - myStep
-        input1 = input1 - myStep
-        input2 = input2 - myStep
-        input3 = input3 - myStep
+        input0 = input0 + myStep
+        input1 = input1 + myStep
+        input2 = input2 + myStep
+        input3 = input3 + myStep
         
         
 
@@ -134,8 +135,19 @@ def onclick(args):
         print("Lights are Off")
         lightVar.set("Lights are Off")
         
-    if(args == "moveForward"):
-        moveForward()
+    if(args == "moveLinear"):
+        moveLinear()
+        
+    if(args == "changeDirection"):
+        global myStep
+        if(myStep > 0):
+            currentDirection = "Forward"
+        elif (myStep < 0):
+            currentDirection = "Backward"
+        else:
+            currentDirection="Stopped"
+        myStep = -myStep
+        
 
 
 #create button elements
@@ -146,9 +158,14 @@ lightBtnOff = tk.Button(root,buttonStyle, text="Lights Off",relief=tk.FLAT,
                        command=lambda:onclick("lightBtnOff"))
 lightLabel = tk.Label(root,buttonStyle,textvariable=lightVar)
 
-moveForwardButton = tk.Button(root,buttonStyle,text="Move Forward",relief=tk.FLAT,
-                        command=lambda:onclick("moveForward"),
+moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
+                        command=lambda:onclick("moveLinear"),
                         repeatdelay=50,repeatinterval=50)
+
+changeDirectionButton =tk.Button(root,buttonStyle,
+                                 text="Direction: " + currentDirection,
+                                 relief=tk.FLAT,
+                                 command=lambda:onclick("changeDirection"))
 
 
 
@@ -164,7 +181,8 @@ lightBtnOn.grid(row = 1, column = 1, sticky=tk.EW)
 lightBtnOff.grid(row=2, column = 1, sticky=tk.EW)
 lightLabel.grid(row=3, column = 1, sticky=tk.EW)
 
-moveForwardButton.grid(row = 1,column=2,sticky=tk.EW)
+moveLinearButton.grid(row = 1,column=2,sticky=tk.EW)
+changeDirectionButton.grid(row=2,column=2,sticky=tk.EW)
 
 
 root.geometry("800x400")
