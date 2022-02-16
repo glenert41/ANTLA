@@ -23,7 +23,7 @@ pwm = pigpio.pi()
 
 iterations = 0
 myStep = .1
-currentDirection = "Forward"
+currentDirection = "Direction: Forward"
 desiredLow = 0
 desiredHigh = 180
 
@@ -140,13 +140,18 @@ def onclick(args):
         
     if(args == "changeDirection"):
         global myStep
-        if(myStep > 0):
-            currentDirection = "Forward"
-        elif (myStep < 0):
-            currentDirection = "Backward"
-        else:
-            currentDirection="Stopped"
-        myStep = -myStep
+        global currentDirection
+        if(currentDirection == "Direction: Backward"):
+            currentDirection = "Direction: Forward"
+            changeDirectionButton['text'] = "Direction: Forward"
+            myStep = abs(myStep)
+            print(currentDirection)
+        elif (currentDirection == "Direction: Forward"):
+            currentDirection = "Direction: Backward"
+            changeDirectionButton['text'] = "Direction: Backward"
+            myStep = -1 * abs(myStep)
+            print(currentDirection)
+        
         
 
 
@@ -163,7 +168,7 @@ moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
                         repeatdelay=50,repeatinterval=50)
 
 changeDirectionButton =tk.Button(root,buttonStyle,
-                                 text="Direction: " + currentDirection,
+                                 text=currentDirection,
                                  relief=tk.FLAT,
                                  command=lambda:onclick("changeDirection"))
 
