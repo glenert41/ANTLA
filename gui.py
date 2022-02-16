@@ -22,8 +22,10 @@ GPIO.setmode(GPIO.BOARD)
 pwm = pigpio.pi()
 
 iterations = 0
-myStep = .1
+myStep = .2
 currentDirection = "Direction: Forward"
+lightStatus = "Lights: Off"
+
 desiredLow = 0
 desiredHigh = 180
 
@@ -126,14 +128,17 @@ def moveLinear():
 
 
 def onclick(args):
-    
-    if args == "lightBtnOn":
-        print("Lights are On")
-        lightVar.set("Lights are On")
+    global lightStatus
+    if args == "lightButton":
+        if(lightStatus == "Lights: Off"):
+            lightStatus = "Lights: On"
+            lightButton['text'] = lightStatus
+        elif(lightStatus == "Lights: On"):
+            lightStatus = "Lights: Off"
+            lightButton['text'] = lightStatus
+
        
-    if args == "lightBtnOff":
-        print("Lights are Off")
-        lightVar.set("Lights are Off")
+    
         
     if(args == "moveLinear"):
         moveLinear()
@@ -156,12 +161,11 @@ def onclick(args):
 
 
 #create button elements
-lightBtnOn = tk.Button(root,buttonStyle, text="Lights On", relief=tk.FLAT,
-                       command=lambda:onclick("lightBtnOn")
+lightButton = tk.Button(root,buttonStyle, text=lightStatus, relief=tk.FLAT,
+                       command=lambda:onclick("lightButton"),
+                       width=25
                        )
-lightBtnOff = tk.Button(root,buttonStyle, text="Lights Off",relief=tk.FLAT,
-                       command=lambda:onclick("lightBtnOff"))
-lightLabel = tk.Label(root,buttonStyle,textvariable=lightVar)
+
 
 moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
                         command=lambda:onclick("moveLinear"),
@@ -182,9 +186,9 @@ changeDirectionButton =tk.Button(root,buttonStyle,
 #lightLabel.pack()
 
 
-lightBtnOn.grid(row = 1, column = 1, sticky=tk.EW)
-lightBtnOff.grid(row=2, column = 1, sticky=tk.EW)
-lightLabel.grid(row=3, column = 1, sticky=tk.EW)
+lightButton.grid(row = 1, column = 1, sticky=tk.EW)
+
+
 
 moveLinearButton.grid(row = 1,column=2,sticky=tk.EW)
 changeDirectionButton.grid(row=2,column=2,sticky=tk.EW)
