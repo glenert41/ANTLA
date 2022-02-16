@@ -22,7 +22,7 @@ GPIO.setmode(GPIO.BOARD)
 pwm = pigpio.pi()
 
 iterations = 0
-myStep = .2
+myStep = .1
 currentDirection = "Direction: Forward"
 lightStatus = "Lights: Off"
 
@@ -119,10 +119,10 @@ def moveLinear():
         pwm.set_servo_pulsewidth(servo3,servoOutput3)
 
 
-        input0 = input0 + myStep
-        input1 = input1 + myStep
-        input2 = input2 + myStep
-        input3 = input3 + myStep
+        input0 = input0 + (myStep * speedSlider.get()/10)
+        input1 = input1 + (myStep * speedSlider.get()/10)
+        input2 = input2 + (myStep * speedSlider.get()/10)
+        input3 = input3 + (myStep * speedSlider.get()/10)
         
         
 
@@ -169,14 +169,17 @@ lightButton = tk.Button(root,buttonStyle, text=lightStatus, relief=tk.FLAT,
 
 moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
                         command=lambda:onclick("moveLinear"),
-                        repeatdelay=50,repeatinterval=50)
+                        repeatdelay=50,repeatinterval=50,width = 25)
 
 changeDirectionButton =tk.Button(root,buttonStyle,
                                  text=currentDirection,
                                  relief=tk.FLAT,
-                                 command=lambda:onclick("changeDirection"))
+                                 command=lambda:onclick("changeDirection"),
+                                 width=25)
 
-
+speedSlider = tk.Scale(root,from_=10,to=20,orient=tk.HORIZONTAL,
+                    length = 250,
+                    tickinterval = 2)
 
 #Put elements on main window
 
@@ -193,6 +196,7 @@ lightButton.grid(row = 1, column = 1, sticky=tk.EW)
 moveLinearButton.grid(row = 1,column=2,sticky=tk.EW)
 changeDirectionButton.grid(row=2,column=2,sticky=tk.EW)
 
+speedSlider.grid(row=3,column=2)
 
 root.geometry("800x400")
 root.configure(bg=darkPurple)
