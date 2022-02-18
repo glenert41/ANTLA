@@ -7,6 +7,7 @@ import RPi.GPIO as GPIO
 import time
 import math
 import pigpio
+import pyautogui
 
 #Servo Set Up
 import os
@@ -23,8 +24,10 @@ pwm = pigpio.pi()
 
 iterations = 0
 myStep = .1
+
 currentDirection = "Direction: Forward"
 lightStatus = "Lights: Off"
+modeStatus = "Mode: Button"
 
 desiredLow = 0
 desiredHigh = 180
@@ -156,11 +159,25 @@ def onclick(args):
             changeDirectionButton['text'] = "Direction: Backward"
             myStep = -1 * abs(myStep)
             print(currentDirection)
+            
+    if(args == "switchModeButton"):
+        global modeStatus
+        if(modeStatus == "Mode: Button"):
+            modeStatus = "Mode: Plane"
+            switchModeButton['text'] = modeStatus
+            pyautogui.position()
+        elif(modeStatus == "Mode: Plane"):
+            modeStatus = "Mode: Button"
+            switchModeButton['text'] = modeStatus
         
         
 
 
 #create button elements
+
+switchModeButton = tk.Button(root,buttonStyle,text=modeStatus,relief=tk.FLAT,
+                       command=lambda:onclick("switchModeButton"),width=25) 
+
 lightButton = tk.Button(root,buttonStyle, text=lightStatus, relief=tk.FLAT,
                        command=lambda:onclick("lightButton"),
                        width=25
@@ -181,22 +198,19 @@ speedSlider = tk.Scale(root,from_=10,to=20,orient=tk.HORIZONTAL,
                     length = 250,
                     tickinterval = 2)
 
-#Put elements on main window
-
-#Lights
-#lightBtnOn.pack()
-#lightBtnOff.pack()
-#lightLabel.pack()
 
 
-lightButton.grid(row = 1, column = 1, sticky=tk.EW)
+switchModeButton.grid(row = 1,column =1, sticky=tk.EW)
+
+
+lightButton.grid(row = 1, column = 2, sticky=tk.EW)
 
 
 
-moveLinearButton.grid(row = 1,column=2,sticky=tk.EW)
-changeDirectionButton.grid(row=2,column=2,sticky=tk.EW)
+moveLinearButton.grid(row = 1,column=3,sticky=tk.EW)
+changeDirectionButton.grid(row=2,column=3,sticky=tk.EW)
 
-speedSlider.grid(row=3,column=2)
+speedSlider.grid(row=3,column=3)
 
 root.geometry("800x400")
 root.configure(bg=darkPurple)
