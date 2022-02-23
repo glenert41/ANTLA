@@ -7,6 +7,11 @@ import RPi.GPIO as GPIO
 import time
 import math
 import pigpio
+
+
+import sys
+sys.path
+sys.executable
 import pyautogui
 
 #Servo Set Up
@@ -132,6 +137,8 @@ def moveLinear():
 
 def onclick(args):
     global lightStatus
+    global modeStatus
+    
     if args == "lightButton":
         if(lightStatus == "Lights: Off"):
             lightStatus = "Lights: On"
@@ -143,8 +150,9 @@ def onclick(args):
        
     
         
-    if(args == "moveLinear"):
+    if(args == "moveLinear" and modeStatus == "Mode: Button"):
         moveLinear()
+    
         
     if(args == "changeDirection"):
         global myStep
@@ -161,11 +169,13 @@ def onclick(args):
             print(currentDirection)
             
     if(args == "switchModeButton"):
-        global modeStatus
+        #global modeStatus
         if(modeStatus == "Mode: Button"):
             modeStatus = "Mode: Plane"
             switchModeButton['text'] = modeStatus
-            pyautogui.position()
+            while 0 not in pyautogui.position():
+                time.sleep(1)
+                print(pyautogui.position())
         elif(modeStatus == "Mode: Plane"):
             modeStatus = "Mode: Button"
             switchModeButton['text'] = modeStatus
