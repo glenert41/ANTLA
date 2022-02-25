@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
+from tkinter import Canvas
 #import keyboard
 
 import RPi.GPIO as GPIO
@@ -65,6 +66,10 @@ root.title("ANTLA")
 frame = tk.Frame(root)
 relief=tk.FLAT
 
+app = tk.Tk()
+app.title("Coordinate Plane")
+canvas = Canvas(app)
+
 #331338 is Dark Purple
 darkPurple = "#331338"
 #88869c is blueLavender
@@ -98,6 +103,10 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
     variable = (variable - oldLow) / (oldHigh - oldLow) * (newHigh - newLow) + newLow
     return variable
 
+def movePlane(cursorPosition):
+    time.sleep(1)
+
+    print(cursorPosition)
 
 def moveLinear():
         global input0
@@ -174,8 +183,9 @@ def onclick(args):
             modeStatus = "Mode: Plane"
             switchModeButton['text'] = modeStatus
             while 0 not in pyautogui.position():
-                time.sleep(1)
-                print(pyautogui.position())
+                #time.sleep(1)
+                movePlane(pyautogui.position())
+                #print(pyautogui.position())
         elif(modeStatus == "Mode: Plane"):
             modeStatus = "Mode: Button"
             switchModeButton['text'] = modeStatus
@@ -222,7 +232,19 @@ changeDirectionButton.grid(row=2,column=3,sticky=tk.EW)
 
 speedSlider.grid(row=3,column=3)
 
-root.geometry("800x400")
+canvas.create_rectangle(100,100,200,200,fill="green")
+canvas.pack()
+
+width = root.winfo_screenwidth()
+height = root.winfo_screenheight()
+halfHeight = height/2
+zero=0
+root.geometry(f'{width}x{halfHeight}+{zero}+{zero}')
 root.configure(bg=darkPurple)
+
+app.geometry("1400x325+0+400")
+
+
 root.mainloop()
+app.mainloop()
 
