@@ -105,8 +105,14 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
 
 def movePlane(cursorPosition):
     time.sleep(1)
-
-    print(cursorPosition)
+    width = root.winfo_appx()
+    height = root.winfo_screenheight()
+    windowHeight = int(4.5*height/10)
+    halfHeight = int(1*height/2)
+    
+    windowPosY = cursorPosition[1] - height
+    
+    print(windowPosY)
 
 def moveLinear():
         global input0
@@ -237,12 +243,13 @@ canvas.pack()
 
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
-halfHeight = height/2
+windowHeight = int(4.5*height/10)
+halfHeight = int(1*height/2)
 zero=0
-root.geometry(f'{width}x{halfHeight}+{zero}+{zero}')
+root.geometry(f'{width}x{windowHeight}+{zero}+{zero}')
 root.configure(bg=darkPurple)
 
-app.geometry("1400x325+0+400")
+app.geometry(f'1400x{windowHeight}+0+{halfHeight}')
 
 
 root.mainloop()
