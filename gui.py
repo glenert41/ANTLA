@@ -104,17 +104,27 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
     return variable
 
 def movePlane(cursorPosition):
-    time.sleep(1)
-    width = root.winfo_appx()
-    height = root.winfo_screenheight()
-    windowHeight = int(4.5*height/10)
-    halfHeight = int(1*height/2)
+    time.sleep(.1)
     
-    windowPosY = cursorPosition[1] - height
+    adjustedCursorY = cursorPosition[1] - root.winfo_height()
+    if adjustedCursorY < 100:
+        adjustedCursorY = 100
+    elif adjustedCursorY > 420:
+        adjustedCursorY = 420
+        
+    if 230 < adjustedCursorY < 290:
+        adjustedCursorY = 260
+        
+    desiredSpeed = round(myMapValues(adjustedCursorY,100,420,-.5,.5),2)
+    if(-.1 < desiredSpeed < .1):
+        desiredSpeed = 0
+    print(desiredSpeed)
+    movePlanar(desiredSpeed)
     
-    print(windowPosY)
+    
+    
 
-def moveLinear():
+def moveLinearSlider():
         global input0
         global input1
         global input2
@@ -147,7 +157,38 @@ def moveLinear():
         input2 = input2 + (myStep * speedSlider.get()/10)
         input3 = input3 + (myStep * speedSlider.get()/10)
         
+def movePlanar(speed):
+        global input0
+        global input1
+        global input2
+        global input3
         
+        output0 = cosineMap(input0)
+        output1 = cosineMap(input1)
+        output2 = cosineMap(input2)
+        output3 = cosineMap(input3)
+        
+    
+        output0 = myMapValues(output0,-1,1,desiredLow,desiredHigh)
+        output1 = myMapValues(output1,-1,1,desiredLow,desiredHigh)
+        output2 = myMapValues(output2,-1,1,desiredLow,desiredHigh)
+        output3 = myMapValues(output3,-1,1,desiredLow,desiredHigh)
+        
+        servoOutput0 = myMapValues(output0,desiredLow,desiredHigh,500,2500)
+        servoOutput1 = myMapValues(output1,desiredLow,desiredHigh,500,2500)
+        servoOutput2 = myMapValues(output2,desiredLow,desiredHigh,500,2500)
+        servoOutput3 = myMapValues(output3,desiredLow,desiredHigh,500,2500)
+
+        pwm.set_servo_pulsewidth(servo0,servoOutput0)
+        pwm.set_servo_pulsewidth(servo1,servoOutput1)
+        pwm.set_servo_pulsewidth(servo2,servoOutput2)
+        pwm.set_servo_pulsewidth(servo3,servoOutput3)
+
+
+        input0 = input0 + (speed)
+        input1 = input1 + (speed)
+        input2 = input2 + (speed)
+        input3 = input3 + (speed)
 
 
 def onclick(args):
@@ -165,8 +206,8 @@ def onclick(args):
        
     
         
-    if(args == "moveLinear" and modeStatus == "Mode: Button"):
-        moveLinear()
+    if(args == "moveLinearSlider" and modeStatus == "Mode: Button"):
+        moveLinearSlider()
     
         
     if(args == "changeDirection"):
@@ -211,7 +252,7 @@ lightButton = tk.Button(root,buttonStyle, text=lightStatus, relief=tk.FLAT,
 
 
 moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
-                        command=lambda:onclick("moveLinear"),
+                        command=lambda:onclick("moveLinearSlider"),
                         repeatdelay=50,repeatinterval=50,width = 25)
 
 changeDirectionButton =tk.Button(root,buttonStyle,
@@ -247,8 +288,10 @@ windowHeight = int(4.5*height/10)
 halfHeight = int(1*height/2)
 zero=0
 root.geometry(f'{width}x{windowHeight}+{zero}+{zero}')
+root.resizable(False,False)
 root.configure(bg=darkPurple)
 
+app.resizable(False,False)
 app.geometry(f'1400x{windowHeight}+0+{halfHeight}')
 
 
