@@ -253,7 +253,7 @@ lightButton = tk.Button(root,buttonStyle, text=lightStatus, relief=tk.FLAT,
 
 moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
                         command=lambda:onclick("moveLinearSlider"),
-                        repeatdelay=50,repeatinterval=50,width = 25)
+                        repeatdelay=50,repeatinterval=25,width = 25)
 
 changeDirectionButton =tk.Button(root,buttonStyle,
                                  text=currentDirection,
@@ -279,7 +279,8 @@ changeDirectionButton.grid(row=2,column=3,sticky=tk.EW)
 
 speedSlider.grid(row=3,column=3)
 
-canvas.create_rectangle(100,100,200,200,fill="green")
+#canvas.create_rectangle(100,100,200,200,fill="green")
+canvas.create_rectangle(0,160,500,220,fill="green")
 canvas.pack()
 
 width = root.winfo_screenwidth()
