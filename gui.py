@@ -41,22 +41,22 @@ desiredHigh = 180
 servo0 = 18
 pwm.set_mode(servo0, pigpio.OUTPUT)
 pwm.set_PWM_frequency(servo0,50)
-input0 = 0
+input0Left = 0
 
 servo1 = 26
 pwm.set_mode(servo1, pigpio.OUTPUT)
 pwm.set_PWM_frequency(servo1,50)
-input1 = (1*(math.pi))/2
+input1Left = (1*(math.pi))/2
 
 servo2 = 13
 pwm.set_mode(servo2,pigpio.OUTPUT)
 pwm.set_PWM_frequency(servo2,50)
-input2 = math.pi
+input2Left = math.pi
 
 servo3 = 17
 pwm.set_mode(servo3,pigpio.OUTPUT)
 pwm.set_PWM_frequency(servo3,50)
-input3 = (3*(math.pi))/2
+input3Left = (3*(math.pi))/2
 
 
 
@@ -105,6 +105,15 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
 
 def movePlane(cursorPosition):
     time.sleep(.1)
+
+    scalarL = 1
+    scalarR = 1
+    
+    if cursorPosition[0] < 200:
+        scalarL = 5
+        print("scalarL = 5")
+    else:
+        scalarL = 1
     
     adjustedCursorY = cursorPosition[1] - root.winfo_height()
     if adjustedCursorY < 100:
@@ -118,55 +127,23 @@ def movePlane(cursorPosition):
     desiredSpeed = round(myMapValues(adjustedCursorY,100,420,-.5,.5),2)
     if(-.1 < desiredSpeed < .1):
         desiredSpeed = 0
-    print(desiredSpeed)
-    movePlanar(desiredSpeed)
+    
+    
+    movePlanar(desiredSpeed,scalarL,scalarR)
     
     
     
 
 def moveLinearSlider():
-        global input0
-        global input1
-        global input2
-        global input3
+        global input0Left
+        global input1Left
+        global input2Left
+        global input3Left
         
-        output0 = cosineMap(input0)
-        output1 = cosineMap(input1)
-        output2 = cosineMap(input2)
-        output3 = cosineMap(input3)
-        
-    
-        output0 = myMapValues(output0,-1,1,desiredLow,desiredHigh)
-        output1 = myMapValues(output1,-1,1,desiredLow,desiredHigh)
-        output2 = myMapValues(output2,-1,1,desiredLow,desiredHigh)
-        output3 = myMapValues(output3,-1,1,desiredLow,desiredHigh)
-        
-        servoOutput0 = myMapValues(output0,desiredLow,desiredHigh,500,2500)
-        servoOutput1 = myMapValues(output1,desiredLow,desiredHigh,500,2500)
-        servoOutput2 = myMapValues(output2,desiredLow,desiredHigh,500,2500)
-        servoOutput3 = myMapValues(output3,desiredLow,desiredHigh,500,2500)
-
-        pwm.set_servo_pulsewidth(servo0,servoOutput0)
-        pwm.set_servo_pulsewidth(servo1,servoOutput1)
-        pwm.set_servo_pulsewidth(servo2,servoOutput2)
-        pwm.set_servo_pulsewidth(servo3,servoOutput3)
-
-
-        input0 = input0 + (myStep * speedSlider.get()/10)
-        input1 = input1 + (myStep * speedSlider.get()/10)
-        input2 = input2 + (myStep * speedSlider.get()/10)
-        input3 = input3 + (myStep * speedSlider.get()/10)
-        
-def movePlanar(speed):
-        global input0
-        global input1
-        global input2
-        global input3
-        
-        output0 = cosineMap(input0)
-        output1 = cosineMap(input1)
-        output2 = cosineMap(input2)
-        output3 = cosineMap(input3)
+        output0 = cosineMap(input0Left)
+        output1 = cosineMap(input1Left)
+        output2 = cosineMap(input2Left)
+        output3 = cosineMap(input3Left)
         
     
         output0 = myMapValues(output0,-1,1,desiredLow,desiredHigh)
@@ -185,10 +162,45 @@ def movePlanar(speed):
         pwm.set_servo_pulsewidth(servo3,servoOutput3)
 
 
-        input0 = input0 + (speed)
-        input1 = input1 + (speed)
-        input2 = input2 + (speed)
-        input3 = input3 + (speed)
+        input0Left = input0Left + (myStep * speedSlider.get()/10)
+        input1Left = input1Left + (myStep * speedSlider.get()/10)
+        input2Left = input2Left + (myStep * speedSlider.get()/10)
+        input3Left = input3Left + (myStep * speedSlider.get()/10)
+        
+def movePlanar(speed, scalarL, scalarR):
+        global input0Left
+        global input1Left
+        global input2Left
+        global input3Left
+        
+        output0 = cosineMap(input0Left)
+        output1 = cosineMap(input1Left)
+        output2 = cosineMap(input2Left)
+        output3 = cosineMap(input3Left)
+        
+    
+        output0 = myMapValues(output0,-1,1,desiredLow,desiredHigh)
+        output1 = myMapValues(output1,-1,1,desiredLow,desiredHigh)
+        output2 = myMapValues(output2,-1,1,desiredLow,desiredHigh)
+        output3 = myMapValues(output3,-1,1,desiredLow,desiredHigh)
+        
+        servoOutput0 = myMapValues(output0,desiredLow,desiredHigh,500,2500)
+        servoOutput1 = myMapValues(output1,desiredLow,desiredHigh,500,2500)
+        servoOutput2 = myMapValues(output2,desiredLow,desiredHigh,500,2500)
+        servoOutput3 = myMapValues(output3,desiredLow,desiredHigh,500,2500)
+
+        pwm.set_servo_pulsewidth(servo0,servoOutput0)
+        pwm.set_servo_pulsewidth(servo1,servoOutput1)
+        pwm.set_servo_pulsewidth(servo2,servoOutput2)
+        pwm.set_servo_pulsewidth(servo3,servoOutput3)
+
+
+        input0Left = (input0Left + (speed)) * scalarL
+        input1Left = (input1Left + (speed)) * scalarL
+        input2Left = (input2Left + (speed)) * scalarL
+        input3Left = (input3Left + (speed)) * scalarL
+        
+        print(servoOutput0)
 
 
 def onclick(args):
@@ -229,6 +241,7 @@ def onclick(args):
         if(modeStatus == "Mode: Button"):
             modeStatus = "Mode: Plane"
             switchModeButton['text'] = modeStatus
+            time.sleep(1)
             while 0 not in pyautogui.position():
                 #time.sleep(1)
                 movePlane(pyautogui.position())
