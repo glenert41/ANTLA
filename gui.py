@@ -109,11 +109,21 @@ def movePlane(cursorPosition):
     scalarL = 1
     scalarR = 1
     
-    if cursorPosition[0] < 200:
-        scalarL = 5
-        print("scalarL = 5")
+  
+        
+    
+    print(cursorPosition[0])
+    
+    #scalarL = round((cursorX,0,453,0,3),2)
+    
+    if cursorPosition[0] < root.winfo_width()/3 and cursorPosition[0] > root.winfo_width()/6:
+        scalarL = 2
+    elif cursorPosition[0] < root.winfo_width()/3 and cursorPosition[0] < root.winfo_width()/6:
+        scalarL = 4
     else:
         scalarL = 1
+    print(scalarL)
+    
     
     adjustedCursorY = cursorPosition[1] - root.winfo_height()
     if adjustedCursorY < 100:
@@ -173,6 +183,8 @@ def movePlanar(speed, scalarL, scalarR):
         global input2Left
         global input3Left
         
+      
+        
         output0 = cosineMap(input0Left)
         output1 = cosineMap(input1Left)
         output2 = cosineMap(input2Left)
@@ -188,20 +200,27 @@ def movePlanar(speed, scalarL, scalarR):
         servoOutput1 = myMapValues(output1,desiredLow,desiredHigh,500,2500)
         servoOutput2 = myMapValues(output2,desiredLow,desiredHigh,500,2500)
         servoOutput3 = myMapValues(output3,desiredLow,desiredHigh,500,2500)
+        
 
+        
         pwm.set_servo_pulsewidth(servo0,servoOutput0)
         pwm.set_servo_pulsewidth(servo1,servoOutput1)
         pwm.set_servo_pulsewidth(servo2,servoOutput2)
         pwm.set_servo_pulsewidth(servo3,servoOutput3)
-
-
-        input0Left = (input0Left + (speed)) * scalarL
-        input1Left = (input1Left + (speed)) * scalarL
-        input2Left = (input2Left + (speed)) * scalarL
-        input3Left = (input3Left + (speed)) * scalarL
         
-        print(servoOutput0)
 
+        
+
+        input0Left = (input0Left + (scalarL * speed)) 
+        input1Left = (input1Left + (scalarL * speed)) 
+        input2Left = (input2Left + (scalarL * speed)) 
+        input3Left = (input3Left + (scalarL * speed)) 
+        
+        #print(scalarL * speed)
+        
+        
+
+        
 
 def onclick(args):
     global lightStatus
@@ -246,6 +265,7 @@ def onclick(args):
                 #time.sleep(1)
                 movePlane(pyautogui.position())
                 #print(pyautogui.position())
+            print("Exited Planar Control")
         elif(modeStatus == "Mode: Plane"):
             modeStatus = "Mode: Button"
             switchModeButton['text'] = modeStatus
