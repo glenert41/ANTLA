@@ -158,6 +158,9 @@ def moveLinearSlider():
         output0R = myMapValues(output0R,-1,1,desiredLow,desiredHigh)
         
         kit.servo[0].angle=output0L
+        kit.servo[1].angle=output1L
+        kit.servo[2].angle=output2L
+        kit.servo[3].angle=output3L
 
 
         input0Left = round(input0Left + (myStep * speedSlider.get()/10),5)
