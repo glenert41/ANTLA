@@ -161,6 +161,11 @@ def moveLinearSlider():
         kit.servo[1].angle=output1L
         kit.servo[2].angle=output2L
         kit.servo[3].angle=output3L
+        
+        kit.servo[4].angle=output0L
+        kit.servo[5].angle=output1L
+        kit.servo[6].angle=output2L
+        kit.servo[7].angle=output3L
 
 
         input0Left = round(input0Left + (myStep * speedSlider.get()/10),5)
@@ -181,28 +186,29 @@ def movePlanar(speed, scalarL, scalarR):
         
       
         
-        output0 = cosineMap(input0Left)
-        output1 = cosineMap(input1Left)
-        output2 = cosineMap(input2Left)
-        output3 = cosineMap(input3Left)
+        output0L = cosineMap(input0Left)
+        output1L = cosineMap(input1Left)
+        output2L = cosineMap(input2Left)
+        output3L = cosineMap(input3Left)
         
     
-        output0 = myMapValues(output0,-1,1,desiredLow,desiredHigh)
-        output1 = myMapValues(output1,-1,1,desiredLow,desiredHigh)
-        output2 = myMapValues(output2,-1,1,desiredLow,desiredHigh)
-        output3 = myMapValues(output3,-1,1,desiredLow,desiredHigh)
+        output0L = myMapValues(output0L,-1,1,desiredLow,desiredHigh)
+        output1L = myMapValues(output1L,-1,1,desiredLow,desiredHigh)
+        output2L = myMapValues(output2L,-1,1,desiredLow,desiredHigh)
+        output3L = myMapValues(output3L,-1,1,desiredLow,desiredHigh)
         
-        servoOutput0 = myMapValues(output0,desiredLow,desiredHigh,500,2500)
-        servoOutput1 = myMapValues(output1,desiredLow,desiredHigh,500,2500)
-        servoOutput2 = myMapValues(output2,desiredLow,desiredHigh,500,2500)
-        servoOutput3 = myMapValues(output3,desiredLow,desiredHigh,500,2500)
+    
+    
         
-
+        kit.servo[0].angle=output0L
+        kit.servo[1].angle=output1L
+        kit.servo[2].angle=output2L
+        kit.servo[3].angle=output3L
         
-        pwm.set_servo_pulsewidth(servo0L,servoOutput0)
-        pwm.set_servo_pulsewidth(servo1L,servoOutput1)
-        pwm.set_servo_pulsewidth(servo2L,servoOutput2)
-        pwm.set_servo_pulsewidth(servo3L,servoOutput3)
+        kit.servo[4].angle=output0L
+        kit.servo[5].angle=output1L
+        kit.servo[6].angle=output2L
+        kit.servo[7].angle=output3L
         
 
         
