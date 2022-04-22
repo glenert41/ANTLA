@@ -157,6 +157,7 @@ def moveLinearSlider():
         
         output0R = myMapValues(output0R,-1,1,desiredLow,desiredHigh)
         
+        #left side
         kit.servo[0].angle=output0L
         kit.servo[1].angle=output1L
         kit.servo[2].angle=output2L
@@ -166,16 +167,24 @@ def moveLinearSlider():
         kit.servo[5].angle=output1L
         kit.servo[6].angle=output2L
         kit.servo[7].angle=output3L
-
+        
+        #right side
+        kit.servo[8].angle= 180 - output0L
+        kit.servo[9].angle=180 - output1L
+        kit.servo[10].angle=180 - output2L
+        kit.servo[11].angle=180 - output3L
+        
+        kit.servo[12].angle=180 - output0L
+        kit.servo[13].angle=180 - output1L
+        kit.servo[14].angle=180 - output2L
+        kit.servo[15].angle=180 - output3L
 
         input0Left = round(input0Left + (myStep * speedSlider.get()/10),5)
         input1Left = round(input1Left + (myStep * speedSlider.get()/10),5)
         input2Left = round(input2Left + (myStep * speedSlider.get()/10),5)
         input3Left = round(input3Left + (myStep * speedSlider.get()/10),5)
         
-        input0Right = round(input0Right + (myStep * speedSlider.get()/10),5)
-        
-       
+           
 
         
 def movePlanar(speed, scalarL, scalarR):
