@@ -1,5 +1,6 @@
 #ANTLA GUI/Controller
 
+#Imports
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
@@ -19,33 +20,32 @@ sys.path
 sys.executable
 
 
-#Servo Set Up
-
+#Runs the "sudo killall pigpiod," essentially clearing everything else and prepping for the GUI to open
 os.system("sudo killall pigpiod")
 time.sleep(1)
-
 open_io="sudo pigpiod"
 os.system(open_io)
 time.sleep(1)
 
-
-iterations = 0
-myStep = .1
-
+#Declares the status variables that the User sees on the tiles on the GUI
 currentDirection = "Direction: Forward"
 lightStatus = "Lights: Off"
 modeStatus = "Mode: Button"
 
+
+#Servo Control
+
+#change in degree between each iteration that the loop runs. Every time the servos run to a position, they will move by their current position + or - myStep
+myStep = .1
+#How high and low the servos should be able to turn. Generally both should be the same distance from 90. (e.g. 45 and 135)
 desiredLow = 0
 desiredHigh = 180
-
-
+#initial inputs for the servo positions. These variables will be mapped by their cosine values. 
+#Each variable is pi/2 apart and increasing at myStep per iteration, thus making each servo rotate around the unit circle equally spaced
 input0Left = 0
 input1Left = (1*(math.pi))/2
 input2Left = math.pi
 input3Left = (3*(math.pi))/2
-
-input0Right = 0
 
 
 #GUI Setup
@@ -142,14 +142,14 @@ def moveLinearSlider():
         global input2Left
         global input3Left
         
-        global input0Right
+
         
         output0L = cosineMap(input0Left)
         output1L = cosineMap(input1Left)
         output2L = cosineMap(input2Left)
         output3L = cosineMap(input3Left)
         
-        output0R = cosineMap(input0Right)    
+ 
         
     
         output0L = myMapValues(output0L,-1,1,desiredLow,desiredHigh)
@@ -157,7 +157,7 @@ def moveLinearSlider():
         output2L = myMapValues(output2L,-1,1,desiredLow,desiredHigh)
         output3L = myMapValues(output3L,-1,1,desiredLow,desiredHigh)
         
-        output0R = myMapValues(output0R,-1,1,desiredLow,desiredHigh)
+ 
         
         #left side
         kit.servo[0].angle=output0L
