@@ -100,7 +100,7 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
     variable = (variable - oldLow) / (oldHigh - oldLow) * (newHigh - newLow) + newLow
     return variable
 
-#code for taking the mouse movements when in planar control, and converting that data to data,
+#code for taking the mouse movements in the bottom window when in planar control, and converting that data to data,
 #to data the movePlanar (the function that actually sets power to the servos) function can use
 def movePlane(cursorPosition):
     time.sleep(.2)
@@ -130,10 +130,13 @@ def movePlane(cursorPosition):
     elif adjustedCursorY > 420:
         adjustedCursorY = 420
         
+    #if the y value of the mouse is close enough to the center of the window, set the y value of the mouse to the center
     if 230 < adjustedCursorY < 290:
         adjustedCursorY = 260
-        
+    
+    #set the desired speed
     desiredSpeed = round(myMapValues(adjustedCursorY,100,420,-.5,.5),2)
+    #if the desiredSpeed is close enough to 0, then set it to 0
     if(-.1 < desiredSpeed < .1):
         desiredSpeed = 0
     
@@ -142,15 +145,16 @@ def movePlane(cursorPosition):
     
     
     
-
+#function for driving ANTLA back and forth linearly with buttons on the top window
 def moveLinearSlider():
+        #grab the inputs, so they can be changed below, and updated for planar control
         global input0Left
         global input1Left
         global input2Left
         global input3Left
         
 
-        
+        #take the cosine of the inputs
         output0L = cosineMap(input0Left)
         output1L = cosineMap(input1Left)
         output2L = cosineMap(input2Left)
@@ -158,7 +162,7 @@ def moveLinearSlider():
         
  
         
-    
+        #scale these cosine values from -1-1 to desiredLow-desiredHigh for the servos (generally 0-180)
         output0L = myMapValues(output0L,-1,1,desiredLow,desiredHigh)
         output1L = myMapValues(output1L,-1,1,desiredLow,desiredHigh)
         output2L = myMapValues(output2L,-1,1,desiredLow,desiredHigh)
@@ -166,7 +170,7 @@ def moveLinearSlider():
         
  
         
-        #left side
+        #set the left side servos to their positions
         kit.servo[0].angle=output0L
         kit.servo[1].angle=output1L
         kit.servo[2].angle=output2L
@@ -177,7 +181,7 @@ def moveLinearSlider():
         kit.servo[6].angle=output2L
         kit.servo[7].angle=output3L
         
-        #right side
+        #set the right side servos to their positions (which are 180 minus the left side)(as to mirror across ANTLA's vertical line of symmetry)
         kit.servo[8].angle= 180 - output0L
         kit.servo[9].angle=180 - output1L
         kit.servo[10].angle=180 - output2L
@@ -188,6 +192,8 @@ def moveLinearSlider():
         kit.servo[14].angle=180 - output2L
         kit.servo[15].angle=180 - output3L
 
+        #take the input from this iteration, and change it according to the product of the desired step size and the speed slider
+        #this allows for the next iteration's position to be close to the previous, thus making a smooth motion
         input0Left = round(input0Left + (myStep * speedSlider.get()/10),5)
         input1Left = round(input1Left + (myStep * speedSlider.get()/10),5)
         input2Left = round(input2Left + (myStep * speedSlider.get()/10),5)
@@ -195,21 +201,22 @@ def moveLinearSlider():
         
            
 
-        
+#actually move the servos when in planar control
 def movePlanar(speed, scalarL, scalarR):
+        #grab the inputs so they can be used later, and updated for LinearSlider
         global input0Left
         global input1Left
         global input2Left
         global input3Left
         
       
-        
+        #take the cosine of the inputs
         output0L = cosineMap(input0Left)
         output1L = cosineMap(input1Left)
         output2L = cosineMap(input2Left)
         output3L = cosineMap(input3Left)
         
-    
+        #scale these cosine values from -1-1 to desiredLow-desiredHigh for the servos (generally 0-180)
         output0L = myMapValues(output0L,-1,1,desiredLow,desiredHigh)
         output1L = myMapValues(output1L,-1,1,desiredLow,desiredHigh)
         output2L = myMapValues(output2L,-1,1,desiredLow,desiredHigh)
@@ -217,7 +224,7 @@ def movePlanar(speed, scalarL, scalarR):
         
     
     
-        
+        #set the left side servos to their positions
         kit.servo[0].angle=output0L
         kit.servo[1].angle=output1L
         kit.servo[2].angle=output2L
@@ -228,15 +235,16 @@ def movePlanar(speed, scalarL, scalarR):
         kit.servo[6].angle=output2L
         kit.servo[7].angle=output3L
         
-
+        #Right side in Progress
         
 
+        #update the inputs for the next iteration by adding the product of the scalar and speed to the current input
         input0Left = (input0Left + (scalarL * speed)) 
         input1Left = (input1Left + (scalarL * speed)) 
         input2Left = (input2Left + (scalarL * speed)) 
         input3Left = (input3Left + (scalarL * speed)) 
         
-        #print(scalarL * speed)
+     
         
         
 
