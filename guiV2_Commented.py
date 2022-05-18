@@ -1,24 +1,26 @@
+#ANTLA GUI/Controller
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter.ttk import *
 from tkinter import Canvas
-#import keyboard
+import time
+import math
+import pigpio
+import sys
+import pyautogui
+import os
+
 
 from adafruit_servokit import ServoKit
 kit = ServoKit(channels=16)
 
-import time
-import math
-import pigpio
-
-
-import sys
 sys.path
 sys.executable
-import pyautogui
+
 
 #Servo Set Up
-import os
+
 os.system("sudo killall pigpiod")
 time.sleep(1)
 
