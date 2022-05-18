@@ -251,9 +251,11 @@ def movePlanar(speed, scalarL, scalarR):
         
 
 def onclick(args):
+    #global variables to be used to switch between states and modes
     global lightStatus
     global modeStatus
     
+    #light button switch (used to test switch toggle currently, will be hooked up to a light switch)
     if args == "lightButton":
         if(lightStatus == "Lights: Off"):
             lightStatus = "Lights: On"
@@ -264,11 +266,11 @@ def onclick(args):
 
        
     
-        
+    #This runs when the "moveLinearSlider" button is pressed; this calls the moveLinearSlider() function to begin moving the servos. 
     if(args == "moveLinearSlider" and modeStatus == "Mode: Button"):
         moveLinearSlider()
     
-        
+    #this is what runs when the changeDirection button is pressed; this changes the direction
     if(args == "changeDirection"):
         global myStep
         global currentDirection
@@ -283,12 +285,14 @@ def onclick(args):
             myStep = -1 * abs(myStep)
             print(currentDirection)
             
+    #this is what runs when the "switchModeButton" is pressed; this is what changes between linearSlider and Planar Control
     if(args == "switchModeButton"):
         #global modeStatus
         if(modeStatus == "Mode: Button"):
             modeStatus = "Mode: Plane"
             switchModeButton['text'] = modeStatus
             time.sleep(1)
+            #while the cursor is on the screen, keep running; if the cursor leaves the screen, stop ANTLA and hang out until button control is called for
             while 0 not in pyautogui.position():
                 #time.sleep(1)
                 movePlane(pyautogui.position())
