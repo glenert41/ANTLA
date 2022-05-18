@@ -12,7 +12,7 @@ import sys
 import pyautogui
 import os
 
-
+#imports the library for the Servo Header we are physically using; stating that this header has 16 possible servos that can attach 
 from adafruit_servokit import ServoKit
 kit = ServoKit(channels=16)
 
@@ -33,9 +33,9 @@ lightStatus = "Lights: Off"
 modeStatus = "Mode: Button"
 
 
-#Servo Control
-
+#Servo Control Setup
 #change in degree between each iteration that the loop runs. Every time the servos run to a position, they will move by their current position + or - myStep
+#myStep should start at .1 degrees per iteration
 myStep = .1
 #How high and low the servos should be able to turn. Generally both should be the same distance from 90. (e.g. 45 and 135)
 desiredLow = 0
@@ -49,15 +49,23 @@ input3Left = (3*(math.pi))/2
 
 
 #GUI Setup
+#open bottom window
 root = tk.Tk()
+#name the top window "ANTLA"
 root.title("ANTLA")
+#Organizer
 frame = tk.Frame(root)
+#Make it 2d appearing; just for aesthetics
 relief=tk.FLAT
 
+#Open bottom window
 app = tk.Tk()
+#Name the bottom window "Coordinate Plane"
 app.title("Coordinate Plane")
+#Allow for this lower window to use the Canvas feature (allows one to draw)
 canvas = Canvas(app)
 
+#Hex Color shortcuts for the GUI
 #331338 is Dark Purple
 darkPurple = "#331338"
 #88869c is blueLavender
@@ -71,6 +79,7 @@ queenBlue = "#4D7298"
 #ffffff is white
 white = "#ffffff"
 
+#Sets every button on the top window to this desired style; using the shortcut colors from above
 buttonStyle = {'background':blueLavender,
                'foreground':'white',
                'activebackground':queenBlue,
@@ -78,30 +87,30 @@ buttonStyle = {'background':blueLavender,
                'highlightcolor':blueLavender,
                'highlightbackground':blueLavender,
                'borderwidth':2}
-lightVar = tk.StringVar()
-lightVar.set("No Status Chosen; Lights Off")
 
-
+#cosine function; just because math.cos(x) feels clunky compared to cosineMap(x); this function doesn't necessarily need to exist; this is Graham being Graham
 def cosineMap(pos):
     mappedPos = math.cos(pos)
     #print(mappedPos)
     return mappedPos
 
+#Takes the input values (which are generally decimals between 0-1 because they are the outputs of the consine function), 
+#and maps them to desired values that the servo can turn (generally 0-180 and 45-135)
 def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
     variable = (variable - oldLow) / (oldHigh - oldLow) * (newHigh - newLow) + newLow
     return variable
 
+#code for taking the mouse movements when in planar control, and converting that data to data,
+#to data the movePlanar (the function that actually sets power to the servos) function can use
 def movePlane(cursorPosition):
     time.sleep(.2)
 
+    #these scalars change the rate at which each side of servos oscillate; thus spinning the robot
     scalarL = 1
     scalarR = 1
-    
-  
-        
-        
-    #scalarL = round((cursorX,0,453,0,3),2)
-    
+   
+
+    #checks the horizontal position of the mouse on the screen, changing the left or right scalar accordingly, thus allowing for turning
     if cursorPosition[0] < root.winfo_width()/3 and cursorPosition[0] > root.winfo_width()/6:
         scalarL = 2
         scalarR = 1
@@ -111,12 +120,10 @@ def movePlane(cursorPosition):
     else:
         scalarL = 1
         scalarR = 1
-    #print("scalarL: " + str(scalarL))
-    #print("scalarR: " + str(scalarR))
-    
 
+   
     
-    
+    #Checks the vertial position of the mouse, thus changing the forward/backward linear speed of ANTLA
     adjustedCursorY = cursorPosition[1] - root.winfo_height()
     if adjustedCursorY < 100:
         adjustedCursorY = 100
@@ -130,7 +137,7 @@ def movePlane(cursorPosition):
     if(-.1 < desiredSpeed < .1):
         desiredSpeed = 0
     
-    
+    #sends the desired speed for the servos, and both scalars, to the function to move the servos
     movePlanar(desiredSpeed,scalarL,scalarR)
     
     
