@@ -292,7 +292,8 @@ def onclick(args):
             modeStatus = "Mode: Plane"
             switchModeButton['text'] = modeStatus
             time.sleep(1)
-            #while the cursor is on the screen, keep running; if the cursor leaves the screen, stop ANTLA and hang out until button control is called for
+            #while the cursor is on the screen, keep running; if the cursor leaves the screen during planar control,
+            #then stop ANTLA and hang out until button control is called for
             while 0 not in pyautogui.position():
                 #time.sleep(1)
                 movePlane(pyautogui.position())
@@ -307,44 +308,41 @@ def onclick(args):
 
 #create button elements
 
+#Button to toggle between Planar and LinearSlider operation modes
 switchModeButton = tk.Button(root,buttonStyle,text=modeStatus,relief=tk.FLAT,
                        command=lambda:onclick("switchModeButton"),width=25) 
 
+#button to turn on and off LED lights; used for testing buttons as well
 lightButton = tk.Button(root,buttonStyle, text=lightStatus, relief=tk.FLAT,
                        command=lambda:onclick("lightButton"),
                        width=25
                        )
 
-
+#Button to  move robot when in LinearSlider operation mode
 moveLinearButton = tk.Button(root,buttonStyle,text="Move Linear",relief=tk.FLAT,
                         command=lambda:onclick("moveLinearSlider"),
                         repeatdelay=50,repeatinterval=25,width = 25)
 
+#Button to switch the robots direction when in LinearSlider operation mode
 changeDirectionButton =tk.Button(root,buttonStyle,
                                  text=currentDirection,
                                  relief=tk.FLAT,
                                  command=lambda:onclick("changeDirection"),
                                  width=25)
-
+#Slider that changes the robots speed when in LinearSlider operation mode
 speedSlider = tk.Scale(root,from_=10,to=20,orient=tk.HORIZONTAL,
                     length = 250,
                     tickinterval = 2)
 
 
-
+#Button placement and Aesthetics
 switchModeButton.grid(row = 1,column =1, sticky=tk.EW)
-
-
 lightButton.grid(row = 1, column = 2, sticky=tk.EW)
-
-
-
 moveLinearButton.grid(row = 1,column=3,sticky=tk.EW)
 changeDirectionButton.grid(row=2,column=3,sticky=tk.EW)
-
 speedSlider.grid(row=3,column=3)
 
-#canvas.create_rectangle(100,100,200,200,fill="green")
+
 canvas.create_rectangle(0,160,500,220,fill="green")
 canvas.pack()
 
