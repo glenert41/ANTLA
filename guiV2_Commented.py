@@ -1,5 +1,14 @@
 #ANTLA GUI/Controller
 
+#Two operation modes: Linear Slider and Planer
+  #Linear Slider: This is the button controlled operation mode. There is a button for direction (forward/backward) 
+#and a slider for desired speed (between 1-10). Then, there is a button you press to move the robot; taking in the information from the other buttons
+  #Planar: This operation mode uses the bottom window on the interface. Moving the mouse upwards moves the robot forward, 
+#while moving the mouse downwards moves the robot backwards. When the mouse moves to either side horizontally, the robot will spin
+#To exit planar control, move the mouse either all the way to the left or all the way to the top of the screen (not window).
+
+#The lights button doesn't yet turn on lights, as there are no lights mounted on the robot
+
 #Imports
 import tkinter as tk
 from tkinter import ttk
@@ -342,10 +351,9 @@ moveLinearButton.grid(row = 1,column=3,sticky=tk.EW)
 changeDirectionButton.grid(row=2,column=3,sticky=tk.EW)
 speedSlider.grid(row=3,column=3)
 
-
+#creates plane window's design
 canvas.create_rectangle(0,160,500,220,fill="green")
 canvas.pack()
-
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 windowHeight = int(4.5*height/10)
@@ -358,7 +366,7 @@ root.configure(bg=darkPurple)
 app.resizable(False,False)
 app.geometry(f'1400x{windowHeight}+0+{halfHeight}')
 
-
+#opens up the windows for the user to see
 root.mainloop()
 app.mainloop()
 
