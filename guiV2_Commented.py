@@ -100,8 +100,8 @@ def myMapValues(variable,oldLow,oldHigh,newLow,newHigh):
     variable = (variable - oldLow) / (oldHigh - oldLow) * (newHigh - newLow) + newLow
     return variable
 
-#code for taking the mouse movements in the bottom window when in planar control, and converting that data to data,
-#to data the movePlanar (the function that actually sets power to the servos) function can use
+#code for taking the mouse movements in the bottom window when in planar control, and converting that data to data
+#the movePlanar (the function that actually sets power to the servos) function can use
 def movePlane(cursorPosition):
     time.sleep(.2)
 
